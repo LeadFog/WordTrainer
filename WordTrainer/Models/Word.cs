@@ -39,7 +39,7 @@ namespace WordTrainer.Models
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentNullException("Word is white space");
-                _category = value.Trim(); //trim убирает пробелы и символы в начале\конце строки
+                _category = value.Trim(); 
             }
         }
 

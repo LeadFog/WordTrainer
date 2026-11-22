@@ -17,14 +17,26 @@ public class MainViewModel : INotifyPropertyChanged
     private string _selectedCategory = "";
     private bool _canAnswer = false;
     private bool _canNext = false;
+    public string CurrentCategory => SelectedCategory;
 
     public ObservableCollection<string> Categories { get; } = new();
     public ObservableCollection<string> Options { get; } = new();
+    public event EventHandler? RequestAddWord;
+    public event EventHandler<string>? RequestShowMessage;
 
+    private void OnAddWord(object? parameter)
+    {
+        RequestAddWord?.Invoke(this, EventArgs.Empty);
+    }
     public string Question
     {
         get => _question;
         set { _question = value; OnPropertyChanged(); }
+    }
+
+    public void RefreshAfterAdd()
+    {
+        RefreshCategories();
     }
 
     public string Feedback
@@ -48,7 +60,18 @@ public class MainViewModel : INotifyPropertyChanged
             {
                 _selectedCategory = value;
                 OnPropertyChanged();
-                _trainer.SelectCategory(value);
+
+                if (_trainer.CanSelectCategory(value))
+                {
+                    _trainer.SelectCategory(value);
+                }
+                else
+                {
+                    Question = "В категории недостаточно слов (нужно минимум 2)";
+                    Options.Clear();
+                    CanAnswer = false;
+                    CanNext = false;
+                }
             }
         }
     }
@@ -87,7 +110,7 @@ public class MainViewModel : INotifyPropertyChanged
         Stats = _trainer.Stats.ToString();
     }
 
-    private void RefreshCategories()
+    public void RefreshCategories()
     {
         Categories.Clear();
         foreach (var c in _trainer.Categories)
@@ -132,11 +155,6 @@ public class MainViewModel : INotifyPropertyChanged
     {
         if (_selectedOption != null)
             _trainer.Answer(_selectedOption);
-    }
-
-    private void OnAddWord(object? parameter)
-    {
-        System.Windows.MessageBox.Show("Диалог добавления слова (скоро)");
     }
 
     protected void OnPropertyChanged([CallerMemberName] string? name = null)

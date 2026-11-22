@@ -24,6 +24,11 @@ namespace WordTrainer.Logic
 
         public IReadOnlyList<string> Categories => _repository.Categories;
 
+        public bool CanSelectCategory(string category)
+        {
+            return _repository.Words.Count(w => w.Category == category) >= 2;
+        }
+
         public void NextExercise()
         {
             var words = _repository.Words.Where(w => w.Category == CurrentCategory).ToList();
