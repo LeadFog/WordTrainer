@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+using WordTrainer.Models;
+using System.IO;
+
+namespace WordTrainer.Data
+{
+    public class JsonWordRepository : IWordRepository
+    {
+        private readonly string _filePath;
+        private readonly List<Word> _words = new();
+
+        private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
+
+        public JsonWordRepository(string filePath) => _filePath = filePath;
+
+        public IReadOnlyList<Word> Words => _words;
+
+        public IReadOnlyList<string> Categories =>
+            _words.Select(w => w.Category).Distinct().OrderBy(c => c).ToList();
+
+        public void Add(Word word)
+        {
+            if (_words.Any(w => w.Text.Equals(word.Text, StringComparison.OrdinalIgnoreCase)
+                             && w.Category == word.Category))
+                throw new InvalidOperationException("Такое слово уже есть в этой категории.");
+            _words.Add(word);
+        }
+
+        public void Load()
+        {
+            _words.Clear();
+            if (!File.Exists(_filePath)) { Seed(); return; }
+
+            var json = File.ReadAllText(_filePath);
+            var loaded = JsonSerializer.Deserialize<List<Word>>(json);
+            if (loaded != null) _words.AddRange(loaded);
+        }
+
+        public void Save() =>
+            File.WriteAllText(_filePath, JsonSerializer.Serialize(_words, Options));
+
+        private void Seed()
+        {
+            _words.AddRange(new[]
+            {
+            new Word("cat",   "кот",     "Животные"),
+            new Word("dog",   "собака",  "Животные"),
+            new Word("horse", "лошадь",  "Животные"),
+            new Word("bear",  "медведь", "Животные"),
+            new Word("apple", "яблоко",  "Фрукты"),
+            new Word("pear",  "груша",   "Фрукты"),
+            new Word("grape", "виноград","Фрукты"),
+            new Word("lemon", "лимон",   "Фрукты"),
+            new Word("run",   "бежать",  "Глаголы"),
+            new Word("jump",  "прыгать", "Глаголы"),
+            new Word("read",  "читать",  "Глаголы"),
+            new Word("write", "писать",  "Глаголы"),
+        });
+            Save();
+        }
+    }
+}
