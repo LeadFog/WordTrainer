@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordTrainer.Models
 {
-    internal class Word
+    public class Word
     {
         private string _text = "";
         private string _translation = "";
