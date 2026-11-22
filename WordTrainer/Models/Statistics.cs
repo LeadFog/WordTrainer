@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WordTrainer.Models
 {
-    internal class Statistics
+    public class Statistics
     {
         public int Correct {  get; private set; }
         public int Wrong { get; private set; }
