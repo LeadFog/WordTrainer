@@ -1,12 +1,51 @@
 ﻿<Window x:Class="WordTrainer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WordTrainer"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Тренажёр слов" Height="500" Width="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Категория:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox x:Name="cmbCategory" Width="200"
+                      ItemsSource="{Binding Categories}"
+                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Text="{Binding Question}" 
+                   FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Options}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding}" Margin="0,5" Padding="10,8"
+                            HorizontalContentAlignment="Left"
+                            Click="OnOptionClick"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <TextBlock Grid.Row="3" Text="{Binding Feedback}" 
+                   FontSize="16" Margin="0,10,0,10"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Ответить" Command="{Binding AnswerCommand}" 
+                    Width="100" Margin="5" Padding="8"/>
+            <Button Content="Дальше" Command="{Binding NextCommand}" 
+                    Width="100" Margin="5" Padding="8"/>
+            <Button Content="Добавить слово" Command="{Binding AddWordCommand}" 
+                    Width="120" Margin="5" Padding="8"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="4" Text="{Binding Stats}" 
+                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                   FontSize="12" Margin="0,0,0,0"/>
     </Grid>
 </Window>

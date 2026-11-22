@@ -1,24 +1,34 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using WordTrainer.Data;
+using WordTrainer.Logic;
+using WordTrainer.ViewModels;
 
-namespace WordTrainer
+namespace WordTrainer;
+
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private readonly MainViewModel _viewModel;
+
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+
+        string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "words.json");
+        IWordRepository repository = new JsonWordRepository(path);
+        repository.Load();
+
+        var trainer = new Trainer(repository);
+        _viewModel = new MainViewModel(trainer);
+        DataContext = _viewModel;
+
+        Closing += (s, e) => _viewModel.SaveData();
+    }
+
+    private void OnOptionClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.Button btn)
         {
-            InitializeComponent();
+            _viewModel.SelectOption(btn.Content.ToString()!);
         }
     }
 }
