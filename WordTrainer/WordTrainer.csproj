@@ -8,4 +8,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Logic\" />
+    <Folder Include="Exercises\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>
