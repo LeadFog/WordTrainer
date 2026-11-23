@@ -9,13 +9,13 @@ namespace WordTrainer.Exercises
     {
         private readonly List<string> _options;
 
-        public Word Word { get; }
+        public Item Word { get; }
         public IReadOnlyList<string> Options => _options;
 
         public abstract string Question { get; }
         protected abstract string CorrectAnswer { get; }
 
-        protected Exercise(Word word, IEnumerable<string> options)
+        protected Exercise(Item word, IEnumerable<string> options)
         {
             Word = word ?? throw new ArgumentNullException(nameof(word));
             _options = options.ToList();

@@ -7,7 +7,7 @@ namespace WordTrainer.Exercises
 {
     internal class TranslationExercise : Exercise
     {
-        public TranslationExercise(Word word, IEnumerable<string> options) : base(word, options) { }
+        public TranslationExercise(Item word, IEnumerable<string> options) : base(word, options) { }
 
         public override string Question => $"Translate to Russian: {Word.Text}";
         protected override string CorrectAnswer => Word.Translation;

@@ -15,8 +15,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "words.json");
-        IWordRepository repository = new JsonWordRepository(path);
+        string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "words.txt");
+        IWordRepository repository = new TxtWordRepository(path);
         repository.Load();
 
         _trainer = new Trainer(repository);
@@ -39,18 +39,15 @@ public partial class MainWindow : Window
         {
             try
             {
-                var word = new Word(
-                    dialogVm.Word,
-                    dialogVm.Translation,
-                    dialogVm.SelectedCategory);
+                Item item = dialogVm.CreateItem();
 
-                _trainer.AddWord(word);
+                _trainer.AddWord(item);
                 _viewModel.RefreshAfterAdd();
 
-                if (dialogVm.SelectedCategory == _viewModel.SelectedCategory &&
-                    _trainer.CanSelectCategory(dialogVm.SelectedCategory))
+                if (item.Category == _viewModel.SelectedCategory &&
+                    _trainer.CanSelectCategory(item.Category))
                 {
-                    _trainer.SelectCategory(dialogVm.SelectedCategory);
+                    _trainer.SelectCategory(item.Category);
                 }
             }
             catch (InvalidOperationException ex)

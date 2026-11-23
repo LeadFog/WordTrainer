@@ -9,7 +9,7 @@ namespace WordTrainer.Exercises
     {
         private static readonly Random Rnd = new();
 
-        public static Exercise Create(Word word, IReadOnlyList<Word> allWords, int optionsCount = 4)
+        public static Exercise Create(Item word, IReadOnlyList<Item> allWords, int optionsCount = 4)
         {
             bool reverse = Rnd.Next(2) == 0;
 

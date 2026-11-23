@@ -7,9 +7,9 @@ namespace WordTrainer.Data
 {
     public interface IWordRepository
     {
-        IReadOnlyList<Word> Words { get; }
+        IReadOnlyList<Item> Words { get; }
         IReadOnlyList<string> Categories { get; }
-        void Add(Word word);
+        void Add(Item word);
         void Load();
         void Save();
     }

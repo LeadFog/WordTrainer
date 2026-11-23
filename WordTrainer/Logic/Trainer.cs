@@ -9,7 +9,7 @@ namespace WordTrainer.Logic
         private readonly IWordRepository _repository; 
         private readonly Random _random = new();
         private Exercise? _current;
-        private Word? _lastWord;      
+        private Item? _lastWord;      
         private bool _isAnswered;     
 
         public Statistics Stats { get; } = new();
@@ -72,7 +72,7 @@ namespace WordTrainer.Logic
             StatisticsChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void AddWord(Word word)
+        public void AddWord(Item word)
         {
             _repository.Add(word);
             _repository.Save();
